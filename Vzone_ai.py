@@ -1,7 +1,6 @@
 import speech_recognition as sr
 import pyttsx3 as ttx
 import pywhatkit
-import pyaudio
 import datetime
 
 listener = sr.Recognizer()
@@ -16,19 +15,20 @@ def parle(text):
 def ecoute():
     try:
         with sr.Microphone () as source:
+            listener.adjust_for_ambient_noise(source, duration=1)
             print('parler ')
             voix=listener.listen(source)
-            listener.energy_threshold = 5000
             command = listener.recognize_google(voix,language ='fr-FR')
-            return command
-    except:
+            
+    except UnboundLocalError:
         pass
+    return command
 
 def assistant():
     command = ecoute()
     if command:
         print(command)
-        if 'boujour' in command:
+        if 'bonjour' in command:
             parle('bonjour comment ça va?')
         elif 'oui ça va et toi?' in command:
             parle('oui ça va de mon côté, comment je peux vous aider')
